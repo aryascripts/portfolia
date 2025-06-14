@@ -5,16 +5,16 @@
   </div>
 
   <!-- Total Balance Display -->
-  <div class="w-full flex justify-center mb-12">
-    <div class="text-center text-6xl">
-      <div class="font-bold text-gray-900 tracking-tight text-6xl">
-        <%= format_currency_with_code(@total_balance, 'CAD') %>
-      </div>
+  <div class="w-full flex justify-center mb-6">
+    <div class="text-center">
+      <p class="text-3xl font-bold text-gray-900 tracking-tight">
+        <%= format_currency_with_code(@total_balance || 0, 'CAD') %>
+      </p>
     </div>
   </div>
 
   <% if notice %>
-  <div class="rounded-md bg-green-50 p-4 mb-6">
+  <div class="rounded-md bg-green-50 p-4 mt-6 mb-6">
     <div class="flex">
       <div class="flex-shrink-0">
         <svg class="h-5 w-5 text-green-400" viewBox="0 0 20 20" fill="currentColor">
@@ -44,8 +44,10 @@
             </thead>
             <tbody class="bg-white divide-y divide-gray-200">
               <% @accounts.each do |account| %>
-              <tr>
-                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900"><%= account.name %></td>
+              <tr class="hover:bg-gray-50 cursor-pointer" onclick="window.location='<%= account_path(account) %>'">
+                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                  <%= link_to account.name, account_path(account), class: "text-indigo-600 hover:text-indigo-900" %>
+                </td>
                 <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500"><%= account.account_type %></td>
                 <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500"><%= account.currency %></td>
                 <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">

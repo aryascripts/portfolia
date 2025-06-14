@@ -1,12 +1,15 @@
 class AccountsController < ApplicationController
   def index
-    @accounts = Account.includes(:account_balances)
-                      .order(created_at: :desc)
+    @accounts = Account.all
+    @total_balance = Account.joins(:account_balances)
+                           .select('accounts.*, account_balances.balance, account_balances.recorded_at')
+                           .where('account_balances.recorded_at = (SELECT MAX(recorded_at) FROM account_balances WHERE account_id = accounts.id)')
+                           .sum('account_balances.balance')
+  end
 
-    # Calculate total balance from latest balances
-    @total_balance = @accounts.sum do |account|
-      account.latest_balance&.balance || 0
-    end
+  def show
+    @account = Account.find(params[:id])
+    @balances = @account.account_balances.order(recorded_at: :desc).page(params[:page]).per(20)
   end
 
   def new

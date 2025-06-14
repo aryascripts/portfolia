@@ -70,3 +70,6 @@ group :test do
 end
 
 gem "faker", "~> 3.5"
+
+# Pagination
+gem "kaminari"

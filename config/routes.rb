@@ -8,5 +8,5 @@ Rails.application.routes.draw do
   # Redirect root to accounts
   root to: redirect('/accounts')
 
-  resources :accounts, only: [:index, :new, :create]
+  resources :accounts, only: [:index, :new, :create, :show]
 end
