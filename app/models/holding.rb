@@ -5,6 +5,8 @@ class Holding < ApplicationRecord
   validates :quantity, presence: true, numericality: { greater_than: 0 }
   validates :average_price, presence: true, numericality: { greater_than: 0 }
   validates :current_price, presence: true, numericality: { greater_than: 0 }
+  validates :purchase_price, presence: true, numericality: { greater_than: 0 }
+  validates :purchase_date, presence: true
 
   def market_value
     quantity * current_price
@@ -21,5 +23,9 @@ class Holding < ApplicationRecord
   def unrealized_gain_loss_percentage
     return 0 if cost_basis.zero?
     (unrealized_gain_loss / cost_basis) * 100
+  end
+
+  def gain_loss
+    (current_price - purchase_price) * quantity
   end
 end
