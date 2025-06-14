@@ -2,6 +2,11 @@ class AccountsController < ApplicationController
   def index
     @accounts = Account.includes(:account_balances)
                       .order(created_at: :desc)
+
+    # Calculate total balance from latest balances
+    @total_balance = @accounts.sum do |account|
+      account.latest_balance&.balance || 0
+    end
   end
 
   def new
