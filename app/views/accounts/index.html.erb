@@ -38,8 +38,7 @@
                 <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Account Name</th>
                 <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Type</th>
                 <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Institution</th>
-                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Currency</th>
-                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Current Balance</th>
+                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Current Balance (CAD)</th>
                 <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Last Updated</th>
               </tr>
             </thead>
@@ -51,9 +50,16 @@
                 </td>
                 <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500"><%= account.account_type %></td>
                 <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500"><%= account.institution %></td>
-                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500"><%= account.currency %></td>
-                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                  <%= format_currency_with_code(account.latest_balance&.balance, account.currency) %>
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                  <% if (cad_balance = account.latest_balance&.cad_balance).present? %>
+                  <% formatted = format_currency_with_code(cad_balance.abs, 'CAD') %>
+                  <%= account.balance_direction == 'negative' ? "(#{formatted})" : formatted %>
+                  <% if account.currency != 'CAD' %>
+                  <div class="text-xs text-gray-500">Converted to CAD</div>
+                  <% end %>
+                  <% else %>
+                  —
+                  <% end %>
                 </td>
                 <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                   <% if account.latest_balance %>

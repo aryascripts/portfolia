@@ -9,6 +9,7 @@ class Account < ApplicationRecord
   validates :currency, presence: true, length: { is: 3 }
   validates :book_value, presence: true, numericality: { greater_than_or_equal_to: 0 }
   validates :institution, presence: true
+  validates :balance_direction, inclusion: { in: %w[positive negative] }
 
   def latest_balance
     account_balances.order(recorded_at: :desc).first
@@ -20,5 +21,9 @@ class Account < ApplicationRecord
 
   def latest_cad_balance
     latest_balance&.cad_balance
+  end
+
+  def signed_cad_balance
+    latest_balance&.cad_balance.to_f * (balance_direction == 'negative' ? -1 : 1)
   end
 end

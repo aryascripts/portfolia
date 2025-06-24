@@ -8,6 +8,8 @@ class AccountBalance < ApplicationRecord
   validates :fx_rate_to_cad, numericality: { greater_than: 0 }
 
   def cad_balance
+    return balance if account.currency == 'CAD'
+
     balance * fx_rate_to_cad
   end
 

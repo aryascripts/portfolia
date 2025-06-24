@@ -76,6 +76,13 @@
         </div>
       </div>
 
+      <div>
+        <%= f.label :balance_direction, class: "block text-sm font-medium text-gray-700" %>
+        <div class="mt-1">
+          <%= f.select :balance_direction, options_for_select([['Positive (asset)', 'positive'], ['Negative (debt/liability)', 'negative']], f.object.balance_direction || 'positive'), {}, class: "py-2 px-2 shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md" %>
+        </div>
+      </div>
+
       <div class="flex items-center justify-between pt-4">
         <%= f.submit "Create Account", class: "inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" %>
         <%= link_to "Cancel", accounts_path, class: "text-sm font-medium text-indigo-600 hover:text-indigo-500" %>

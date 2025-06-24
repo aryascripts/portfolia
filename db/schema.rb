@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2025_06_24_160000) do
+ActiveRecord::Schema[7.1].define(version: 2025_06_24_160720) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -35,6 +35,7 @@ ActiveRecord::Schema[7.1].define(version: 2025_06_24_160000) do
     t.string "external_id"
     t.string "institution"
     t.decimal "book_value", precision: 20, scale: 2, default: "0.0", null: false
+    t.string "balance_direction", default: "positive", null: false
     t.index ["account_type"], name: "index_accounts_on_account_type"
   end
 

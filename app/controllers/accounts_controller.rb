@@ -1,10 +1,7 @@
 class AccountsController < ApplicationController
   def index
     @accounts = Account.all
-    @total_balance = Account.joins(:account_balances)
-                           .select('accounts.*, account_balances.balance, account_balances.recorded_at')
-                           .where('account_balances.recorded_at = (SELECT MAX(recorded_at) FROM account_balances WHERE account_id = accounts.id)')
-                           .sum('account_balances.balance')
+    @total_balance = @accounts.sum(&:signed_cad_balance)
   end
 
   def show
