@@ -62,10 +62,12 @@ accounts.each do |account|
     # Ensure book_value is >= 0
     book_value = 0 if book_value < 0
     # Create balance record
+    fx_rate = account.currency == 'USD' ? 1.35 : 1.0
     AccountBalance.create!(
       account: account,
       balance: current_balance,
       book_value: book_value,
+      fx_rate_to_cad: fx_rate,
       recorded_at: rand(1..30).days.ago
     )
   end

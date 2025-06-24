@@ -17,4 +17,8 @@ class Account < ApplicationRecord
   def current_balance
     latest_balance&.balance || 0
   end
+
+  def latest_cad_balance
+    latest_balance&.cad_balance
+  end
 end
