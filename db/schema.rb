@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2025_06_24_212050) do
+ActiveRecord::Schema[7.1].define(version: 2025_06_24_213225) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -36,7 +36,9 @@ ActiveRecord::Schema[7.1].define(version: 2025_06_24_212050) do
     t.string "institution"
     t.decimal "book_value", precision: 20, scale: 2, default: "0.0", null: false
     t.string "balance_direction", default: "positive", null: false
+    t.bigint "user_id", null: false
     t.index ["account_type"], name: "index_accounts_on_account_type"
+    t.index ["user_id"], name: "index_accounts_on_user_id"
   end
 
   create_table "holdings", force: :cascade do |t|
@@ -68,7 +70,7 @@ ActiveRecord::Schema[7.1].define(version: 2025_06_24_212050) do
 
   create_table "oauth_access_tokens", force: :cascade do |t|
     t.bigint "resource_owner_id"
-    t.bigint "application_id", null: false
+    t.bigint "application_id"
     t.string "token", null: false
     t.string "refresh_token"
     t.integer "expires_in"
@@ -102,6 +104,7 @@ ActiveRecord::Schema[7.1].define(version: 2025_06_24_212050) do
   end
 
   add_foreign_key "account_balances", "accounts", on_delete: :cascade
+  add_foreign_key "accounts", "users"
   add_foreign_key "holdings", "accounts", on_delete: :cascade
   add_foreign_key "oauth_access_grants", "oauth_applications", column: "application_id"
   add_foreign_key "oauth_access_tokens", "oauth_applications", column: "application_id"
