@@ -15,6 +15,16 @@ puts "Clearing existing data..."
 AccountBalance.delete_all
 Holding.delete_all
 Account.delete_all
+User.delete_all
+
+# Create a test user
+puts "\nCreating test user..."
+user = User.create!(
+  email: 'test@example.com',
+  password: 'password123',
+  password_confirmation: 'password123'
+)
+puts "Created user: #{user.email}"
 
 # Account types and sample symbols
 ACCOUNT_TYPES = %w[chequing savings investment credit_card non_registered]

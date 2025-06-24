@@ -1,4 +1,6 @@
 class AccountsController < ApplicationController
+  before_action :authenticate_user!
+
   def index
     @accounts = Account.all
     @total_balance = @accounts.sum(&:signed_cad_balance)

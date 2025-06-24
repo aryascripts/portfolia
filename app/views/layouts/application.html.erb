@@ -14,13 +14,23 @@
 
 <body class="min-h-screen bg-gray-50 m-0 p-0">
   <div class="min-h-screen flex flex-col">
-    <!-- Navbar/Header (optional) -->
+    <!-- Navbar/Header -->
     <header>
       <div class="w-full bg-white shadow">
         <div class="max-w-7xl mx-auto px-4 py-6">
-          <h1 class="text-3xl font-bold text-gray-900">
-            <%= link_to "Portfolia", accounts_path %>
-          </h1>
+          <div class="flex justify-between items-center">
+            <h1 class="text-3xl font-bold text-gray-900">
+              <%= link_to "Portfolia", accounts_path %>
+            </h1>
+            <div class="flex items-center space-x-4">
+              <% if logged_in? %>
+              <span class="text-sm text-gray-700">Welcome, <%= current_user.email %></span>
+              <%= link_to "Logout", logout_path, method: :delete, class: "text-sm font-medium text-indigo-600 hover:text-indigo-500" %>
+              <% else %>
+              <%= link_to "Login", login_path, class: "text-sm font-medium text-indigo-600 hover:text-indigo-500" %>
+              <% end %>
+            </div>
+          </div>
         </div>
       </div>
     </header>
