@@ -1,0 +1,93 @@
+<div class="min-h-screen bg-gray-50 py-12">
+  <div class="max-w-md mx-auto sm:px-6 lg:px-8">
+    <div class="bg-white py-8 px-4 shadow sm:rounded-lg sm:px-10">
+      <div class="mb-8">
+        <h2 class="text-2xl font-bold text-gray-900">Add New Account</h2>
+        <p class="mt-1 text-sm text-gray-500">Create a new investment account to track.</p>
+      </div>
+
+      <%= form_with(model: @account, class: "space-y-6") do |f| %>
+      <% if @account.errors.any? %>
+      <div class="rounded-md bg-red-50 p-4">
+        <div class="flex">
+          <div class="flex-shrink-0">
+            <svg class="h-5 w-5 text-red-400" viewBox="0 0 20 20" fill="currentColor">
+              <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd" />
+            </svg>
+          </div>
+          <div class="ml-3">
+            <h3 class="text-sm font-medium text-red-800">
+              <%= pluralize(@account.errors.count, "error") %> prohibited this account from being saved:
+            </h3>
+            <div class="mt-2 text-sm text-red-700">
+              <ul class="list-disc pl-5 space-y-1">
+                <% @account.errors.full_messages.each do |message| %>
+                <li><%= message %></li>
+                <% end %>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+      <% end %>
+
+      <div>
+        <%= f.label :name, class: "block text-sm font-medium text-gray-700" %>
+        <div class="mt-1">
+          <%= f.text_field :name, class: "py-2 px-2 shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md" %>
+        </div>
+      </div>
+
+      <div>
+        <%= f.label :account_type, class: "block text-sm font-medium text-gray-700" %>
+        <div class="mt-1">
+          <%= f.select :account_type, 
+                options_for_select(Account::ACCOUNT_TYPES.map { |type| [type.titleize, type] }),
+                { include_blank: 'Select account type' },
+                class: "py-2 px-2 shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md" %>
+        </div>
+      </div>
+
+      <div>
+        <%= f.label :currency, class: "block text-sm font-medium text-gray-700" %>
+        <div class="mt-1">
+          <%= f.text_field :currency, value: 'CAD', class: "py-2 px-2 shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md" %>
+        </div>
+      </div>
+
+      <div>
+        <%= f.label :institution, class: "block text-sm font-medium text-gray-700" %>
+        <div class="mt-1">
+          <%= f.text_field :institution, class: "py-2 px-2 shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md" %>
+        </div>
+      </div>
+
+      <div>
+        <%= f.label :external_id, class: "block text-sm font-medium text-gray-700" %>
+        <div class="mt-1">
+          <%= f.text_field :external_id, class: "py-2 px-2 shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md" %>
+        </div>
+      </div>
+
+      <div>
+        <%= f.label :book_value, class: "block text-sm font-medium text-gray-700" %>
+        <div class="mt-1">
+          <%= f.number_field :book_value, step: "0.01", min: "0", class: "py-2 px-2 shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md" %>
+        </div>
+      </div>
+
+      <div>
+        <%= f.label :balance_direction, class: "block text-sm font-medium text-gray-700" %>
+        <div class="mt-1">
+          <%= f.select :balance_direction, options_for_select([['Positive (asset)', 'positive'], ['Negative (debt/liability)', 'negative']], f.object.balance_direction || 'positive'), {}, class: "py-2 px-2 shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md" %>
+        </div>
+      </div>
+
+      <div class="flex items-center justify-between pt-4">
+        <%= f.submit "Create Account", class: "inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" %>
+        <%= link_to "Cancel", accounts_path, class: "text-sm font-medium text-indigo-600 hover:text-indigo-500" %>
+      </div>
+      <% end %>
+    </div>
+  </div>
+</div>

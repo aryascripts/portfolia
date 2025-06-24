@@ -1,0 +1,31 @@
+<div class="max-w-2xl mx-auto px-4 py-12">
+  <% if flash[:alert] %>
+  <div class="mb-4 p-2 bg-red-100 text-red-700 rounded">
+    <%= flash[:alert] %>
+  </div>
+  <% end %>
+  <% if flash[:notice] %>
+  <div class="mb-4 p-2 bg-green-100 text-green-700 rounded">
+    <%= flash[:notice] %>
+  </div>
+  <% end %>
+  <h1 class="text-2xl font-bold mb-6">Import Accounts & Balances from CSV</h1>
+  <%= form_with url: imports_path, method: :post, local: true, html: { multipart: true }, class: "space-y-4" do |f| %>
+  <div>
+    <%= f.label :file, "CSV File", class: "block text-sm font-medium text-gray-700" %>
+    <%= f.file_field :file, class: "block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded file:border-0 file:text-sm file:font-semibold file:bg-indigo-50 file:text-indigo-700 hover:file:bg-indigo-100 mt-2" %>
+  </div>
+  <div>
+    <%= f.submit "Import CSV", class: "inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" %>
+    <%= link_to "Back to Accounts", accounts_path, class: "ml-4 text-sm text-indigo-600 hover:text-indigo-900" %>
+  </div>
+  <% end %>
+  <div class="mt-8">
+    <h2 class="text-lg font-semibold mb-2">CSV Format Example</h2>
+    <pre class="bg-gray-100 p-4 rounded text-xs overflow-x-auto">
+account_name,account_type,currency,institution,external_id,balance_direction,balance,book_value,fx_rate_to_cad,recorded_at
+My TFSA,TFSA,CAD,Wealthsimple,ws-001,positive,10500.50,10000.00,1.0,2025-06-20
+Visa Card,credit_card,USD,Chase,chase-cc-123,negative,500.00,500.00,1.35,2025-06-20
+    </pre>
+  </div>
+</div>
