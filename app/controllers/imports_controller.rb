@@ -9,7 +9,7 @@ class ImportsController < ApplicationController
       redirect_to imports_path, alert: "Please select a CSV file to import."
       return
     end
-    result = AccountCsvImporter.new(params[:file]).import
+    result = AccountCsvImporter.new(params[:file], user: current_user).import
     redirect_to imports_path, notice: "#{result[:imported]} rows imported. #{result[:failed]} failed." # Optionally, show errors
   end
 end
