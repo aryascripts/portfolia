@@ -23,6 +23,19 @@ class AccountsController < ApplicationController
     end
   end
 
+  def import
+    if request.post?
+      if params[:file].blank?
+        redirect_to accounts_import_path, alert: "Please select a CSV file to import."
+        return
+      end
+      result = AccountCsvImporter.new(params[:file]).import
+      redirect_to accounts_path, notice: "#{result[:imported]} rows imported. #{result[:failed]} failed."
+    else
+      render :import
+    end
+  end
+
   private
 
   def account_params
