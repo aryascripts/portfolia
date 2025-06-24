@@ -25,6 +25,7 @@
         <thead class="bg-gray-50">
           <tr>
             <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Balance</th>
+            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Book Value</th>
             <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Recorded At</th>
           </tr>
         </thead>
@@ -33,6 +34,9 @@
           <tr>
             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
               <%= format_currency_with_code(balance.balance, @account.currency) %>
+            </td>
+            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+              <%= format_currency_with_code(balance.book_value, @account.currency) %>
             </td>
             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
               <span data-format-date><%= balance.recorded_at.iso8601 %></span>

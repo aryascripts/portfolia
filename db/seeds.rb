@@ -17,7 +17,7 @@ Holding.delete_all
 Account.delete_all
 
 # Account types and sample symbols
-ACCOUNT_TYPES = ['TFSA', 'RRSP', 'Non-Registered', 'Other']
+ACCOUNT_TYPES = %w[chequing savings investment credit_card non_registered]
 SYMBOLS = [
   ['AAPL', 'Apple Inc.'],
   ['TSLA', 'Tesla Inc.'],
@@ -39,7 +39,9 @@ accounts = []
   account = Account.create!(
     name: Faker::Company.name + " Investment Account",
     account_type: ACCOUNT_TYPES.sample,
-    currency: ['CAD', 'USD'].sample
+    currency: ['CAD', 'USD'].sample,
+    institution: Faker::Bank.name,
+    book_value: rand(8000.0..90000.0).round(2)
   )
   accounts << account
   puts "Created account: #{account.name} (#{account.account_type})"
@@ -52,43 +54,23 @@ accounts.each do |account|
   current_balance = rand(10000..100000).to_f
 
   # Generate 5-10 historical balances
-  rand(5..10).times do |i|
+  rand(5..50).times do |i|
     # Randomly adjust the balance by ±5%
     adjustment = rand(-0.05..0.05)
     current_balance = (current_balance * (1 + adjustment)).round(2)
-
+    book_value = (current_balance * rand(0.8..1.2)).round(2)
+    # Ensure book_value is >= 0
+    book_value = 0 if book_value < 0
     # Create balance record
     AccountBalance.create!(
       account: account,
       balance: current_balance,
+      book_value: book_value,
       recorded_at: rand(1..30).days.ago
     )
   end
 
   puts "Created #{account.account_balances.count} balance records for #{account.name}"
-end
-
-# Create holdings (optional)
-puts "\nCreating holdings..."
-accounts.each do |account|
-  # Create 2-3 holdings per account, ensuring no duplicate symbols
-  available_symbols = SYMBOLS.shuffle
-  rand(2..3).times do
-    symbol, name = available_symbols.pop
-    quantity = rand(1..100).to_f
-    average_price = rand(50..500).to_f
-    current_price = (average_price * rand(0.8..1.2)).round(2)
-
-    Holding.create!(
-      account: account,
-      symbol: symbol,
-      quantity: quantity,
-      average_price: average_price,
-      current_price: current_price
-    )
-  end
-
-  puts "Created #{account.holdings.count} holdings for #{account.name}"
 end
 
 puts "\nSeed data creation completed!"
