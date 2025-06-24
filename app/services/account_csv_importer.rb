@@ -5,13 +5,14 @@ class AccountCsvImporter
     account_name account_type currency institution external_id balance_direction balance book_value fx_rate_to_cad recorded_at
   ].freeze
 
-  attr_reader :file, :imported, :failed, :errors
+  attr_reader :file, :imported, :failed, :errors, :user
 
-  def initialize(file)
+  def initialize(file, user:)
     @file = file.respond_to?(:path) ? file.path : file
     @imported = 0
     @failed = 0
     @errors = []
+    @user = user
   end
 
   def import
@@ -42,7 +43,7 @@ class AccountCsvImporter
     end
 
     begin
-      account = Account.find_or_initialize_by(
+      account = user.accounts.find_or_initialize_by(
         name: row['account_name'],
         institution: row['institution'],
         external_id: row['external_id']

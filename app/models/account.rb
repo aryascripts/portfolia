@@ -1,10 +1,13 @@
 class Account < ApplicationRecord
   ACCOUNT_TYPES = %w[chequing savings investment credit_card non_registered].freeze
 
+  belongs_to :user
+
   has_many :account_balances, dependent: :destroy
   has_many :holdings, dependent: :destroy
 
-  validates :name, presence: true
+  validates :user, presence: true
+  validates :name, uniqueness: { scope: :user_id }, presence: true
   validates :account_type, presence: true, inclusion: { in: ACCOUNT_TYPES }
   validates :currency, presence: true, length: { is: 3 }
   validates :book_value, presence: true, numericality: { greater_than_or_equal_to: 0 }

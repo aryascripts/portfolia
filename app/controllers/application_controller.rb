@@ -8,9 +8,14 @@ class ApplicationController < ActionController::Base
   end
 
   def current_user
-    @current_user ||= User.find(session[:user_id]) if session[:user_id]
+    if doorkeeper_token
+      @current_user ||= User.find_by(id: doorkeeper_token.resource_owner_id)
+    elsif session[:user_id]
+      @current_user ||= User.find_by(id: session[:user_id])
+    end
   rescue ActiveRecord::RecordNotFound
     session[:user_id] = nil
+    nil
   end
 
   def logged_in?
@@ -18,4 +23,8 @@ class ApplicationController < ActionController::Base
   end
 
   helper_method :current_user, :logged_in?
+
+  def doorkeeper_token
+    @doorkeeper_token ||= Doorkeeper::AccessToken.by_token(request.headers['Authorization']&.split(' ')&.last)
+  end
 end
