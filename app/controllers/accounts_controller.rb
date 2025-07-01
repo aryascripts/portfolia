@@ -10,6 +10,9 @@ class AccountsController < ApplicationController
   def show
     @account = current_user.accounts.find(params[:id])
     @balances = @account.account_balances.order(recorded_at: :desc).page(params[:page]).per(20)
+    @period = params[:period] || '1_month'
+    @resolution = params[:resolution] || '100'
+    @chart_data = AccountBalance.chart_data_for_account(@account, period: @period, resolution: @resolution)
   end
 
   def new

@@ -1,0 +1,82 @@
+<div class="bg-white shadow overflow-hidden sm:rounded-lg mb-8">
+  <div class="px-4 py-5 sm:px-6">
+    <div class="flex justify-between items-center">
+      <div>
+        <h3 class="text-lg leading-6 font-medium text-gray-900">
+          <%= title %>
+        </h3>
+        <% if local_assigns[:subtitle].present? %>
+        <p class="mt-1 max-w-2xl text-sm text-gray-500">
+          <%= subtitle %>
+        </p>
+        <% end %>
+      </div>
+      <% if local_assigns[:show_period_selector] %>
+      <div class="flex items-center space-x-4">
+        <div class="flex space-x-2">
+          <% periods = [
+              { value: 'all', label: 'All' },
+              { value: '3_days', label: '3D' },
+              { value: '7_days', label: '7D' },
+              { value: '1_month', label: '1M' },
+              { value: '3_months', label: '3M' },
+              { value: '6_months', label: '6M' },
+              { value: '1_year', label: '1Y' }
+            ] %>
+          <% periods.each do |period| %>
+          <%= link_to period[:label], 
+                  url_for(period: period[:value], resolution: local_assigns[:current_resolution]), 
+                  class: "inline-block px-3 py-1.5 text-sm font-medium rounded #{local_assigns[:current_period] == period[:value] ? 'bg-indigo-50 text-indigo-700 border border-indigo-200' : 'text-gray-500 hover:text-gray-700 hover:bg-gray-50'}", 
+                  style: "padding: 6px 12px; border-radius: 4px;" %>
+          <% end %>
+        </div>
+
+        <div class="flex items-center space-x-2">
+          <select id="resolution" onchange="changeResolution(this.value)" class="text-sm border border-gray-300 rounded px-2 py-1" style="padding: 4px 8px; border-radius: 4px;">
+            <% resolutions = [
+                { value: '50', label: '50 dots' },
+                { value: '100', label: '100 dots' },
+                { value: '150', label: '150 dots' },
+                { value: 'all', label: 'All dots' }
+              ] %>
+            <% resolutions.each do |res| %>
+            <option value="<%= res[:value] %>" <%= local_assigns[:current_resolution] == res[:value] ? 'selected' : '' %>>
+              <%= res[:label] %>
+            </option>
+            <% end %>
+          </select>
+        </div>
+      </div>
+
+      <script>
+        function changeResolution(value) {
+          const url = new URL(window.location);
+          url.searchParams.set('resolution', value);
+          window.location.href = url.toString();
+        }
+      </script>
+      <% end %>
+    </div>
+  </div>
+  <div class="px-4 py-5 sm:px-6">
+    <%= area_chart data, 
+        xtitle: local_assigns[:xtitle] || "Date", 
+        ytitle: local_assigns[:ytitle] || "Value", 
+        colors: local_assigns[:colors] || ["#4F46E5"],
+        prefix: local_assigns[:prefix],
+        thousands: local_assigns[:thousands] || ",",
+        library: {
+          scales: {
+            y: {
+              beginAtZero: local_assigns[:begin_at_zero] || false
+            },
+            x: {
+              type: 'time',
+              time: {
+                unit: local_assigns[:time_unit] || 'day'
+              }
+            }
+          }
+        } %>
+  </div>
+</div>
