@@ -21,6 +21,7 @@ services:
       RAILS_ENV: production
       DATABASE_URL: postgres://portfolia:portfolia@db:5432/portfolia_production
       SECRET_KEY_BASE: ${SECRET_KEY_BASE}
+      FORCE_SSL: "false" # change to true in production
     ports:
       - "3000:3000"
     volumes:
