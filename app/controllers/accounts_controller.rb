@@ -12,7 +12,9 @@ class AccountsController < ApplicationController
     @balances = @account.account_balances.order(recorded_at: :desc).page(params[:page]).per(20)
     @period = params[:period] || '1_month'
     @resolution = params[:resolution] || '100'
-    @chart_data = AccountBalance.chart_data_for_account(@account, period: @period, resolution: @resolution)
+    chart_result = AccountBalance.chart_data_for_account(@account, period: @period, resolution: @resolution)
+    @chart_data = chart_result[:chart_data]
+    @performance = chart_result[:performance_percentage]
   end
 
   def new
